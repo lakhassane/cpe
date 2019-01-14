@@ -74,6 +74,7 @@ export class ProjectComponent implements OnInit {
     const obj = this.ngxXml2jsonService.xmlToJson( xml );
 
     for ( var i = 0; i < obj.Process.task.length; i++ ) {
+      // Get all the Tasks and put them in an array
       this.TasksList.push({
         id: i,
         task_id: obj.Process.task[i]["@attributes"].id,
@@ -84,7 +85,7 @@ export class ProjectComponent implements OnInit {
         predecessor_id: obj.Process.task[i]["@attributes"].linkToPredecessor !=  undefined ?
           obj.Process.task[i]["@attributes"].linkToPredecessor : null,
       });
-
+      // Separate the CTs from the rest
       if ( obj.Process.task[i]["@attributes"].type == "CollaborativeTask" ) {
         this.CTI.push({
           id: i,
@@ -98,6 +99,7 @@ export class ProjectComponent implements OnInit {
             obj.Process.task[i]["@attributes"].linkToPredecessor : null,
         });
       }
+      // Separate the STs from the rest
       if ( obj.Process.task[i]["@attributes"].type == "SingleTask" ) {
         this.STI.push({
           id: i,

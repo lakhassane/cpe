@@ -15,22 +15,27 @@ export class InstantiateComponent implements OnInit {
   task: any = {};
   CPatterns: any = [];
   Actors:any = [];
+  WPI2:any = []; // Created WPIs in database
   numberOfActors:any = 1;
 
-  CPSTI:any = [];
+  CPSTI:any = []; // Holds all the STIs of the chosen Collaboration Pattern
 
   CPTIP:any = [];
-  PWPI: any = []; // patterns WPIs
-  PTIP: any = []; // patterns TIPs
+  PWPI: any = []; // Holds the WorkProductInstances of the chosen Collaboration Pattern
+  PTIP: any = []; // Holds the TIPs of the chosen Collaboration Pattern
 
   wsType: any;
-  STI: any = [];
+  STI: any = []; // Holds the future STIs to write in Database
+  WPI: any = []; // Holds the future STIs to write in Database
   CTISTI: any = [];
   TIS:any = [];
   TIP:any = [];
 
   pattern: any;
   patternText: any;
+
+  input: any = [];
+  output: any = [];
 
   constructor( private route: ActivatedRoute, private taskservice: TaskService, private projectservice: ProjectService,
                private ngxXml2jsonService: NgxXml2jsonService ) { }
@@ -68,8 +73,9 @@ export class InstantiateComponent implements OnInit {
   parsePattern() {
     const parser = new DOMParser();
     const xml = parser.parseFromString( this.patternText, 'text/xml' );
-    const obj = this.ngxXml2jsonService.xmlToJson( xml );
+    const obj = this.ngxXml2jsonService.xmlToJson( xml ); // obj == cpattern
 
+    // FROM ALGO : SingleTaskInstance cpsti[] = cp.getSingletaskinstance();
     for ( var i = 0; i < obj["Process"].task.length; i++ ) {
       this.CPSTI.push({
         id: i,
@@ -89,18 +95,21 @@ export class InstantiateComponent implements OnInit {
         name: obj["Process"].workproduct[i]["@attributes"].name
       })
     }
-    //if (  obj["Process"].taskparameter ) {
-    for ( var i = 0; i < obj["Process"].taskparameter.length; i++) {
-      this.PTIP.push({
-        id: obj["Process"].taskparameter[i]["@attributes"].id,
-        task: obj["Process"].taskparameter[i]["@attributes"].task,
-        workproduct: obj["Process"].taskparameter[i]["@attributes"].workproduct,
-        direction: obj["Process"].taskparameter[i]["@attributes"].direction
-      })
+    // FROM ALGO : cpti[k] = cpsti[k].getTaskinstanceparameter();
+    if ( obj["Process"].taskparameter != undefined ) {
+      for ( var i = 0; i < obj["Process"].taskparameter.length; i++) {
+        this.PTIP.push({
+          id: obj["Process"].taskparameter[i]["@attributes"].id,
+          task: obj["Process"].taskparameter[i]["@attributes"].task,
+          workproduct: obj["Process"].taskparameter[i]["@attributes"].workproduct,
+          direction: obj["Process"].taskparameter[i]["@attributes"].direction
+        })
+      }
     }
-    for ( var i = 0; i < obj["Process"].task.length; i++ ) {
 
-    }
+    /*for ( var i = 0; i < obj["Process"].task.length; i++ ) {
+
+    }*/
     let TIPt1, TIPt2;
     TIPt1 = this.getTIPbyTaskId( this.PTIP, "t1" );
     TIPt2 = this.getTIPbyTaskId( this.PTIP, "t2" );
@@ -112,6 +121,7 @@ export class InstantiateComponent implements OnInit {
 
   instantiateTask() {
     this.parsePattern();
+    // FROM ALGO : sti = cti.getsingletaskinstance()
     for ( var i = 0; i < this.numberOfActors; i++ ) {
       this.STI.push({
         id: i,
@@ -120,11 +130,12 @@ export class InstantiateComponent implements OnInit {
         sti_name: this.task.task_name + "_inst_" + (i+1),
       });
     }
-
     for ( var z = 0; z < this.STI.length; z++ ) {
       this.taskservice.insertSTIService( this.STI[z] );
+      this.taskservice.insertWPIService( this.WPI[z] );
     }
 
+    // Applying Control-Flow
     if ( this.CPSTI[0].successor_id != null ) {
       this.wsType = this.CPSTI[0].tasksequence["@attributes"].linkKind;
       for ( var i = 1; i < this.numberOfActors; i++ ) {
@@ -146,26 +157,55 @@ export class InstantiateComponent implements OnInit {
       }
     }
 
+    // Applying Data Flow
+    let index = 0; // index des insertions
+    let inputIndex = 1; // index of input
+    let outputIndex = 0; // index of output
     for ( var j = 0; j < this.numberOfActors - 1; j++ ) {
       for ( var m = 0; m < this.CPTIP[0].length; m++ ) {
         for ( var l = 0; l < this.CPTIP[0][m].length; l++ ) {
+          if ( this.TIP[index-1] != undefined && this.TIP[index-1].task == this.STI[j+m] &&
+            this.TIP[index-1].direction == this.CPTIP[0][m][l][0].direction ) {
+            continue;
+          }
           this.TIP.push({
             id: (j+1),
             direction: this.CPTIP[0][m][l][0].direction,
-            task: this.STI[j+m]
-          })
+            task: this.STI[j+m],
+            //wpi: this.WPI[j+l].wpi_name
+            //input: this.input[index],
+            //output: this.output[index],
+            wpi: this.CPTIP[0][m][l][0].direction == "in" ? this.input[inputIndex] : this.output[outputIndex]
+          });
+          index++;
+          if ( this.CPTIP[0][m][l][0].direction == "in" ) {
+            inputIndex++;
+          } else { outputIndex++ }
         }
       }
     }
-    for (var y = 0; y < this.TIP.length; y++ ) {
-      let wpi = "ASS_" + (y+1);
-      //this.taskservice.applyDataFlowService( this.TIP[y], wpi );
+    /*for ( var j = 0; j < this.TIP.length; j++ ) {
+      if ( this.TIP[j].direction == "in" ) {
+
+      }
+    }*/
+    for ( var y = 0; y < this.TIP.length; y++ ) {
+      // let wpi = "ASS_" + (y+1);
+      this.taskservice.applyDataFlowService( this.TIP[y] );
     }
     console.log( this.TIP );
 
   }
 
   getNumber = function( num ) {
+    this.WPI = [];
+    for ( var i = 0; i < num; i++ ) {
+      this.WPI.push({
+        id: i,
+        wpi_id: "ASS_" + ( i + 1 ),
+        wpi_name: "ASS_" + ( i + 1 ),
+      })
+    }
     return new Array( Number( num ) );
   };
 
@@ -189,6 +229,16 @@ export class InstantiateComponent implements OnInit {
             alias: res[i]._node.properties['alias']
           })
 
+        }
+      });
+
+    this.taskservice.getAllWPIsService()
+      .subscribe( (res: any[]) => {
+        for ( var i = 0; i < res.length; i++ ) {
+          this.WPI2.push({
+            wpi_id: res[i]._node.properties['wpi_id'],
+            wpi_name: res[i]._node.properties['wpi_name']
+          })
         }
       });
 

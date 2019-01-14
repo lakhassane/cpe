@@ -29,6 +29,16 @@ export class TaskService {
       }));
   }
 
+  getAllWPIsService() {
+    const uri = "http://localhost:8585/api/wpi/";
+    return this
+      .http
+      .get( uri )
+      .pipe( map( res => {
+        return res
+      }));
+  }
+
   insertSTIService( sti ) {
     const uri = "http://localhost:8585/api/sti";
     const obj = {
@@ -39,9 +49,24 @@ export class TaskService {
     };
     return this
         .http
-        .post( uri, obj )
-        .subscribe( res =>
+        .post( uri, obj, {responseType: 'text'} )
+        //.subscribe( res =>
+        .toPromise().then( res =>
           console.log( res ));
+  }
+
+  insertWPIService ( wpi ) {
+    const uri = "http://localhost:8585/api/wpi";
+    const obj = {
+      wpi_id: wpi.wpi_id,
+      wpi_name: wpi.wpi_name
+    };
+    return this
+      .http
+      .post( uri, obj, {responseType: 'text'} )
+      //.subscribe( res =>
+      .toPromise().then( res =>
+        console.log( res ));
   }
 
   applySTISequencingService( tis ) {
@@ -53,22 +78,24 @@ export class TaskService {
     };
     return this
         .http
-        .post( uri, obj )
-        .subscribe( res =>
+        .post( uri, obj, {responseType: 'text'} )
+        //.subscribe( res =>
+        .toPromise().then( res =>
           console.log( res ));
   }
 
-  applyDataFlowService ( tip, wpi ) {
+  applyDataFlowService ( tip ) {
     const uri = "http://localhost:8585/api/applydataflow";
     const obj = {
       sti_id: tip.task.sti_id,
       direction: tip.direction,
-      wpi: wpi
+      wpi: tip.wpi
     };
     return this
       .http
-      .post( uri, obj )
-      .subscribe( res =>
+      .post( uri, obj, {responseType: 'text'} )
+      //.subscribe( res =>
+      .toPromise().then( res =>
         console.log( res ));
   }
 }
