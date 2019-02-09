@@ -122,6 +122,7 @@ export class InstantiateComponent implements OnInit {
   instantiateTask() {
     this.parsePattern();
     // FROM ALGO : sti = cti.getsingletaskinstance()
+    // To edit if we want to change STIs order
     for ( var i = 0; i < this.numberOfActors; i++ ) {
       this.STI.push({
         id: i,

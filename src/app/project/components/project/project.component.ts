@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgxXml2jsonService } from 'ngx-xml2json';
 
 import { ProjectService } from '../../services/project.service';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-project',
@@ -18,13 +19,16 @@ export class ProjectComponent implements OnInit {
   success: any;
 
   TasksList:any = [];
+  WPsList:any = [];
+  TPsList:any = [];
   CTI:any = [];
   STI:any = [];
 
   cti: any;
   sti: any;
 
-  constructor(private projectservice: ProjectService, private ngxXml2jsonService: NgxXml2jsonService) {
+  constructor( private projectservice: ProjectService, private taskservice: TaskService,
+               private ngxXml2jsonService: NgxXml2jsonService ) {
   }
 
   fileChanged( e ) {
@@ -115,16 +119,42 @@ export class ProjectComponent implements OnInit {
       }
     }
 
+    for ( var i = 0; i < obj.Process.taskparameter.length; i++ ) {
+      this.TPsList.push({
+        id: i,
+        tp_id: obj.Process.taskparameter[i]["@attributes"].id,
+        tp_task: obj.Process.taskparameter[i]["@attributes"].task,
+        tp_workproduct: obj.Process.taskparameter[i]["@attributes"].workproduct,
+        tp_direction: obj.Process.taskparameter[i]["@attributes"].direction
+      });
+    }
+
+    for ( var i = 0; i < obj.Process.workproduct.length; i++ ) {
+      this.WPsList.push({
+        id: i,
+        wpi_id: obj.Process.workproduct[i]["@attributes"].id,
+        wpi_name: obj.Process.workproduct[i]["@attributes"].name
+      });
+    }
+
     for ( var z = 0; z < this.TasksList.length; z++ ) {
       if ( this.TasksList[z].task_type == "CollaborativeTask" ) {
         this.cti =  this.getCTIbyId(z);
-        //console.log("cti : " + JSON.stringify( this.cti));
         this.projectservice.insertTaskCTIService( this.TasksList[z], this.cti );
       }
       if ( this.TasksList[z].task_type == "SingleTask" ) {
         this.sti =  this.getSTIbyId(z);
-        //console.log("sti : " + JSON.stringify(this.sti));
         this.projectservice.insertTaskSTIService( this.TasksList[z], this.sti );
+      }
+    }
+    for ( var z = 0; z < this.WPsList.length; z++ ) {
+      this.taskservice.insertWPIService( this.WPsList[z] );
+    }
+    for ( var z = 0; z < this.TPsList.length; z++ ) {
+      if ( this.TPsList[z].tp_task.substring( this.TPsList[z].tp_task.length - 2 )  == "CT" ) {
+        this.projectservice.applyDataFlowCTService( this.TPsList[z] );
+      } else {
+        this.projectservice.applyDataFlowService( this.TPsList[z] );
       }
     }
     this.success = 1;

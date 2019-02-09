@@ -17,12 +17,12 @@ export class ProjectService {
       cti_id: cti.cti_id,
       cti_name: cti.cti_name,
       cti_state: "instantiated"
-
     };
     this
       .http
       .post( uri, obj )
-      .subscribe( res =>
+      //.subscribe( res =>
+      .toPromise().then( res =>
           console.log( res ));
   }
 
@@ -39,7 +39,38 @@ export class ProjectService {
     this
       .http
       .post( uri, obj )
-      .subscribe( res =>
+      //.subscribe( res =>
+      .toPromise().then( res =>
+        console.log( res ));
+  }
+
+  applyDataFlowService ( tip ) {
+    const uri = "http://localhost:8585/api/applydataflow";
+    const obj = {
+      sti_id: tip.tp_task,
+      direction: tip.tp_direction,
+      wpi: tip.tp_workproduct
+    };
+    return this
+      .http
+      .post( uri, obj, {responseType: 'text'} )
+      //.subscribe( res =>
+      .toPromise().then( res =>
+        console.log( res ));
+  }
+
+  applyDataFlowCTService ( tip ) {
+    const uri = "http://localhost:8585/api/applydataflowCT";
+    const obj = {
+      cti_id: tip.tp_task,
+      direction: tip.tp_direction,
+      wpi: tip.tp_workproduct
+    };
+    return this
+      .http
+      .post( uri, obj, {responseType: 'text'} )
+      //.subscribe( res =>
+      .toPromise().then( res =>
         console.log( res ));
   }
 

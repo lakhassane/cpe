@@ -227,22 +227,40 @@
           <div class="wizard show-submit">
             <ul>
               <li>
+                <a href="#step-0">
+                  <span class="stepNumber">0</span>
+                  <span class="stepDesc">Step 0<br /><small>Choice of patterns</small></span>
+                </a>
+              </li>
+              <li>
                 <a href="#step-1">
                   <span class="stepNumber">1</span>
-                  <span class="stepDesc">Step 1<br /><small>Choice of instances</small></span>
+                  <span class="stepDesc">Step 1<br /><small>How many components?</small></span>
                 </a>
               </li>
               <li>
                 <a href="#step-2">
                   <span class="stepNumber">2</span>
-                  <span class="stepDesc">Step 2<br /><small>Choice of a collaboration pattern</small></span>
+                  <span class="stepDesc">Step 2<br /><small>Configuration</small></span>
                 </a>
               </li>
             </ul>
+            <div id="step-0">
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Choose a pattern</label>
+
+                <div class="col-md-9">
+                  <input type="file" [(ngModel)]="pattern" name="pattern"
+                         (change)="patternRegister($event)" id="patternfile"/>
+                </div>
+              </div>
+
+            </div>
             <div id="step-1">
 
               <div class="form-group col-md-6">
-                <label class="col-md-4 control-label">Number of actors</label>
+                <label class="col-md-4 control-label">Number of components</label>
                 <div class="col-md-8">
                   <select [(ngModel)]="numberOfActors" name="numberOfActors" class="form-control">
                     <option value="1">1</option>
@@ -326,14 +344,7 @@
               </div>
 
             </div>
-            <div class="form-group">
-              <label class="col-md-3 control-label">Choose a pattern</label>
 
-              <div class="col-md-9">
-                <input type="file" [(ngModel)]="pattern" name="pattern"
-                       (change)="patternRegister($event)" id="patternfile"/>
-              </div>
-            </div>
 
           </div>
         </form>
