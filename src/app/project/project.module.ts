@@ -5,6 +5,7 @@ import { ProjectComponent } from './components/project/project.component';
 import { RouterModule } from '@angular/router';
 import { TaskComponent } from './components/task/task.component';
 import { InstantiateComponent } from './components/instantiate/instantiate.component';
+import { InstancesComponent } from './components/instances/instances.component';
 
 @NgModule({
   imports: [
@@ -12,6 +13,6 @@ import { InstantiateComponent } from './components/instantiate/instantiate.compo
     CommonModule,
     RouterModule
   ],
-  declarations: [ProjectComponent, TaskComponent, InstantiateComponent]
+  declarations: [ProjectComponent, TaskComponent, InstantiateComponent, InstancesComponent]
 })
 export class ProjectModule { }

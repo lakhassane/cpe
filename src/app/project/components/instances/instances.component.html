@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 </head>
 <body>
 <!-- START PAGE CONTAINER -->
@@ -200,89 +201,20 @@
     <!-- START BREADCRUMB -->
     <ul class="breadcrumb">
       <li><a href="#">Home</a></li>
-      <li><a href="#">Tasks</a></li>
-      <li class="active">List</li>
     </ul>
     <!-- END BREADCRUMB -->
+
+    <!-- PAGE TITLE -->
+    <div class="page-title col-md-12">
+      <div class="col-md-6">
+        <h2><span class="fa fa-arrow-circle-o-left"></span> List of instances</h2>
+      </div>
+    </div>
+    <!-- END PAGE TITLE -->
 
     <!-- PAGE CONTENT WRAPPER -->
     <div class="page-content-wrap">
 
-      <div class="row">
-        <!-- START CONTEXTUAL CLASSES TABLE SAMPLE -->
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">List of tasks</h3>
-          </div>
-          <div class="panel-body">
-            <table class="table table-bordered">
-              <thead>
-              <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Action</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let task of TasksList" class="active">
-                <td>{{ task.task_id }}</td>
-                <td>{{ task.task_name }}</td>
-                <td>{{ task.collaborative }}</td>
-                <td>
-                  <!--<a ng-class="task.instantiated ? 'btn disabled' : ''"
-                     ng-click="openModal(task)">instancier</a>-->
-                  <a [routerLink]="['/instantiate', task.task_id]">Instantiate</a>
-                  <a [routerLink]="['/listinstances', task.task_id]">See instances</a>
-                  <!--<a ng-class="!task.instantiated ? 'btn disabled' : ''"
-                     href="./ctidetails.html?id={{task.task_id}}">Voir instances</a>-->
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <!-- END CONTEXTUAL CLASSES TABLE SAMPLE -->
-
-        <script type="text/ng-template" id="myModalContent.html">
-          <div class="modal-header">
-            <h3>Instantiate : {{ task.name }} </h3>
-          </div>
-          <div class="modal-body">
-
-            <div class="form-group col-md-6">
-              <label class="col-md-3 control-label">Number of instances</label>
-              <div class="col-md-9">
-                <select ng-model="instance.numberofinstance" class="form-control select">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group col-md-6" ng-if="instance.numberofinstance > 1">
-              <label class="col-md-3 control-label">Strategy</label>
-              <div class="col-md-9">
-                <select ng-model="instance.strategy" class="form-control select">
-                  <option>Sequential</option>
-                  <option>Parallel</option>
-                </select>
-              </div>
-            </div>
-            <br/>
-            <br/>
-            <br/>
-
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-primary" ng-click="instantiateTask(instance)">Instantiate</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-          </div>
-        </script>
-
-      </div>
 
     </div>
     <!-- END PAGE CONTENT WRAPPER -->
@@ -334,9 +266,3 @@
 
 </body>
 </html>
-
-
-
-
-
-

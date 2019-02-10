@@ -25,6 +25,7 @@ export class InstantiateComponent implements OnInit {
   PTIP: any = []; // Holds the TIPs of the chosen Collaboration Pattern
 
   wsType: any;
+  STIORDERED: any = []; // Holds the STIs ordered during configuration
   STI: any = []; // Holds the future STIs to write in Database
   WPI: any = []; // Holds the future STIs to write in Database
   CTISTI: any = [];
@@ -122,29 +123,34 @@ export class InstantiateComponent implements OnInit {
   instantiateTask() {
     this.parsePattern();
     // FROM ALGO : sti = cti.getsingletaskinstance()
-    // To edit if we want to change STIs order
     for ( var i = 0; i < this.numberOfActors; i++ ) {
       this.STI.push({
         id: i,
         cti_id: this.task.task_id,
-        sti_id: this.task.task_id + "_" + (i+1),
-        sti_name: this.task.task_name + "_inst_" + (i+1),
+        //sti_id: this.task.task_id + "_" + (i+1),
+        //sti_name: this.task.task_name + "_inst_" + (i+1),
+        sti_id: this.task.task_id + "_" + this.STIORDERED[i].substring( this.STIORDERED[i].length - 1 ),
+        sti_name: this.STIORDERED[i]
       });
     }
+
     for ( var z = 0; z < this.STI.length; z++ ) {
-      this.taskservice.insertSTIService( this.STI[z] );
-      this.taskservice.insertWPIService( this.WPI[z] );
+      //this.taskservice.insertSTIService( this.STI[z] );
+      //this.taskservice.insertWPIService( this.WPI[z] );
     }
 
     // Applying Control-Flow
     if ( this.CPSTI[0].successor_id != null ) {
       this.wsType = this.CPSTI[0].tasksequence["@attributes"].linkKind;
-      for ( var i = 1; i < this.numberOfActors; i++ ) {
+      //for ( var i = 1; i < this.numberOfActors; i++ ) {
+      for ( var i = 0; i < this.STI.length - 1; i++ ) {
         this.TIS.push({
           id: i,
-          successor_id: this.task.task_id + "_" + (i+1),
-          predecessor_id: this.task.task_id + "_" + i,
-          linkKind: this.wsType
+          //successor_id: this.task.task_id + "_" + (i+1),
+          //predecessor_id: this.task.task_id + "_" + i,
+          linkKind: this.wsType,
+          successor_id: this.STI[i+1].sti_id,
+          predecessor_id: this.STI[i].sti_id
         });
       }
 
@@ -154,7 +160,7 @@ export class InstantiateComponent implements OnInit {
       });
 
       for ( var y = 0; y < this.TIS.length; y++ ) {
-        this.taskservice.applySTISequencingService( this.TIS[y] );
+        //this.taskservice.applySTISequencingService( this.TIS[y] );
       }
     }
 
@@ -185,11 +191,7 @@ export class InstantiateComponent implements OnInit {
         }
       }
     }
-    /*for ( var j = 0; j < this.TIP.length; j++ ) {
-      if ( this.TIP[j].direction == "in" ) {
 
-      }
-    }*/
     for ( var y = 0; y < this.TIP.length; y++ ) {
       // let wpi = "ASS_" + (y+1);
       this.taskservice.applyDataFlowService( this.TIP[y] );
@@ -200,11 +202,18 @@ export class InstantiateComponent implements OnInit {
 
   getNumber = function( num ) {
     this.WPI = [];
+    this.TOINSTANTIATE = [];
     for ( var i = 0; i < num; i++ ) {
       this.WPI.push({
         id: i,
         wpi_id: "ASS_" + ( i + 1 ),
         wpi_name: "ASS_" + ( i + 1 ),
+      });
+
+      this.TOINSTANTIATE.push({
+        id: i,
+        task_id: this.task.task_id + "_" + ( i + 1),
+        task_name: this.task.task_name + "_inst_" + ( i + 1)
       })
     }
     return new Array( Number( num ) );

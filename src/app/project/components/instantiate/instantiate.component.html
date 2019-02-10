@@ -294,7 +294,12 @@
                       </thead>
                       <tbody>
                       <tr *ngFor="let instance of getNumber( numberOfActors ); let i = index" [attr.data-index]="i">
-                        <td>{{ task.task_name }}_inst_{{ i + 1 }}</td>
+                        <!--<td>{{ task.task_name }}_inst_{{ i + 1 }}</td>-->
+                        <td>
+                          <select class="form-control" [(ngModel)]="STIORDERED[i]" name="STIORDERED">
+                            <option *ngFor="let task of TOINSTANTIATE" [ngValue]="task.task_name" >{{ task.task_name }}</option>
+                          </select>
+                        </td>
                         <td>
                           <select class="form-control">
                             <option *ngFor="let actor of Actors">{{ actor.name }}</option>
@@ -302,7 +307,7 @@
                         </td>
                         <td>
                           <select class="form-control" [(ngModel)]="input[i]" name="input">
-                            <option *ngFor="let wpi of WPI"[ngValue]="wpi.wpi_name">{{ wpi.wpi_name }}</option>
+                            <option *ngFor="let wpi of WPI" [ngValue]="wpi.wpi_name">{{ wpi.wpi_name }}</option>
                           </select>
                         </td>
                         <td>

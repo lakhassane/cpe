@@ -4,13 +4,15 @@ import { ProjectComponent } from './project/components/project/project.component
 import { IndexComponent } from './home/components/index/index.component';
 import { TaskComponent } from './project/components/task/task.component';
 import { InstantiateComponent } from './project/components/instantiate/instantiate.component';
+import { InstancesComponent } from './project/components/instances/instances.component';
 import { Routes, RouterModule } from '@angular/router';
 
 const appRoutes: Routes = [
   { path: 'index', component: IndexComponent },
   { path: 'newproject', component: ProjectComponent },
   { path: 'tasklist', component: TaskComponent },
-  { path: 'instantiate/:id', component: InstantiateComponent }
+  { path: 'instantiate/:id', component: InstantiateComponent },
+  { path: 'listinstances/:id', component: InstancesComponent }
 ];
 
 @NgModule({
