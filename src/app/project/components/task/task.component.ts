@@ -20,7 +20,8 @@ export class TaskComponent implements OnInit {
           this.TasksList.push({
             task_id: res[i]._node.properties['task_id'],
             task_name: res[i]._node.properties['task_name'],
-            instantiated: res[i]._node.properties['state'] == "Instantiated" ? true: false
+            instantiated: res[i]._node.properties['state'] == "Instantiated" ? true: false,
+            state: res[i]._node.properties['state']
           })
 
         }

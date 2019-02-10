@@ -220,7 +220,7 @@
               <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Type</th>
+                <th>State</th>
                 <th>Action</th>
               </tr>
               </thead>
@@ -228,7 +228,7 @@
               <tr *ngFor="let task of TasksList" class="active">
                 <td>{{ task.task_id }}</td>
                 <td>{{ task.task_name }}</td>
-                <td>{{ task.collaborative }}</td>
+                <td>{{ task.state }}</td>
                 <td>
                   <!--<a ng-class="task.instantiated ? 'btn disabled' : ''"
                      ng-click="openModal(task)">instancier</a>-->

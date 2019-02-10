@@ -214,8 +214,38 @@
 
     <!-- PAGE CONTENT WRAPPER -->
     <div class="page-content-wrap">
+      <div class="row">
+        <!-- START CONTEXTUAL CLASSES TABLE SAMPLE -->
+        <div class="col-md-6">
 
+          <!-- START MODALS -->
+          <div class="panel panel-default" *ngFor="let sti of STI">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{ sti.sti_name }}</h3>
 
+              <button [ngClass]="sti.previous != null && sti.previous.state != 'finished' ?'btn disabled' : 'btn btn-success'"
+                      style="float:right" (click)="startTask(sti)">Start task</button>
+              <button [ngClass]="sti.state != 'inprogress' ?'btn disabled' : 'btn btn-danger'"
+                      style="float:right" (click)="endTask(sti)">End task</button>
+            </div>
+            <div class="panel-body">
+              <strong>State: </strong>
+              <button [ngClass]="sti.state != 'instantiated' ?'btn disabled' : 'btn btn-success'">Instantiated</button>
+              <button [ngClass]="sti.state != 'assigned' ?'btn disabled' : 'btn btn-success'">Assigned</button>
+              <button [ngClass]="sti.state != 'inprogress' ?'btn disabled' : 'btn btn-success'">In Progress</button>
+              <button [ngClass]="sti.state != 'finished' ?'btn disabled' : 'btn btn-success'">Finished</button>
+              <br/><br/><br/>
+              <strong>Assigned actor : </strong>
+              <br/><br/><br/>
+              <strong>Previous instance : {{ sti.previous.sti_name }}</strong>
+            </div>
+          </div>
+          <!-- END MODALS -->
+
+        </div>
+        <!-- END CONTEXTUAL CLASSES TABLE SAMPLE -->
+
+      </div>
     </div>
     <!-- END PAGE CONTENT WRAPPER -->
   </div>

@@ -18,4 +18,28 @@ export class InstanceService {
           return res;
         }));
   }
+
+  getPreviousSTIService( id ) {
+    const uri = "http://localhost:8585/api/previoussti/" + id;
+    return this
+        .http
+        .get( uri )
+        .pipe( map( res => {
+          return res;
+        }));
+  }
+
+  updateStateService(sti_id, state) {
+    const uri = "http://localhost:8585/api/updatestate";
+    const obj = {
+      sti_id: sti_id,
+      state: state
+    };
+    return this
+      .http
+      .post( uri, obj, {responseType: 'text'} )
+      //.subscribe( res =>
+      .toPromise().then( res =>
+        console.log( res ));
+  }
 }
