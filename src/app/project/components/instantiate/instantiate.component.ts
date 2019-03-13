@@ -135,8 +135,8 @@ export class InstantiateComponent implements OnInit {
     }
 
     for ( var z = 0; z < this.STI.length; z++ ) {
-      //this.taskservice.insertSTIService( this.STI[z] );
-      //this.taskservice.insertWPIService( this.WPI[z] );
+      this.taskservice.insertSTIService( this.STI[z] );
+      this.taskservice.insertWPIService( this.WPI[z] );
     }
 
     // Applying Control-Flow
@@ -160,7 +160,7 @@ export class InstantiateComponent implements OnInit {
       });
 
       for ( var y = 0; y < this.TIS.length; y++ ) {
-        //this.taskservice.applySTISequencingService( this.TIS[y] );
+        this.taskservice.applySTISequencingService( this.TIS[y] );
       }
     }
 

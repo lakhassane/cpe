@@ -19,10 +19,10 @@ export class ProjectComponent implements OnInit {
   success: any;
 
   TasksList:any = [];
-  WPsList:any = [];
-  TPsList:any = [];
-  CTI:any = [];
-  STI:any = [];
+  WPsList:any = [];   // Array of Work Products
+  TPsList:any = [];   // Array of Task Parameters
+  CTI:any = [];       // Array of CollaborativeTaskInstances
+  STI:any = [];       // Array of SingleTaskInstances
 
   cti: any;
   sti: any;
@@ -71,8 +71,36 @@ export class ProjectComponent implements OnInit {
     }
   }
 
+
+  async insertingData() {
+
+    for ( var z = 0; z < this.TasksList.length; z++ ) {
+      if ( this.TasksList[z].task_type == "CollaborativeTask" ) {
+        this.cti =  this.getCTIbyId(z);
+        let ctiAsyncResult = await this.projectservice.insertTaskCTIService( this.TasksList[z], this.cti );
+      }
+      if ( this.TasksList[z].task_type == "SingleTask" ) {
+        this.sti =  this.getSTIbyId(z);
+        let stiAsyncResult = await this.projectservice.insertTaskSTIService( this.TasksList[z], this.sti );
+      }
+    }
+
+    for ( var z = 0; z < this.WPsList.length; z++ ) {
+      let wpiAsyncResult = await this.taskservice.insertWPIService( this.WPsList[z] );
+    }
+
+    for ( var z = 0; z < this.TPsList.length; z++ ) {
+      if ( this.TPsList[z].tp_task.substring( this.TPsList[z].tp_task.length - 2 )  == "CT" ) {
+        let dfctAsyncResult = await this.projectservice.applyDataFlowCTService( this.TPsList[z] );
+      } else {
+        let dfAsyncResult = await this.projectservice.applyDataFlowService( this.TPsList[z] );
+      }
+    }
+  }
+
   parseModel = function() {
     this.success = 0;
+
     const parser = new DOMParser();
     const xml = parser.parseFromString( this.modelText, 'text/xml' );
     const obj = this.ngxXml2jsonService.xmlToJson( xml );
@@ -119,6 +147,7 @@ export class ProjectComponent implements OnInit {
       }
     }
 
+    // Get all the task parameters (links between task and inputs/outputs) and put them in an array
     for ( var i = 0; i < obj.Process.taskparameter.length; i++ ) {
       this.TPsList.push({
         id: i,
@@ -129,6 +158,7 @@ export class ProjectComponent implements OnInit {
       });
     }
 
+    // Get all the work products and put them in an array
     for ( var i = 0; i < obj.Process.workproduct.length; i++ ) {
       this.WPsList.push({
         id: i,
@@ -137,29 +167,10 @@ export class ProjectComponent implements OnInit {
       });
     }
 
-    for ( var z = 0; z < this.TasksList.length; z++ ) {
-      if ( this.TasksList[z].task_type == "CollaborativeTask" ) {
-        this.cti =  this.getCTIbyId(z);
-        this.projectservice.insertTaskCTIService( this.TasksList[z], this.cti );
-      }
-      if ( this.TasksList[z].task_type == "SingleTask" ) {
-        this.sti =  this.getSTIbyId(z);
-        this.projectservice.insertTaskSTIService( this.TasksList[z], this.sti );
-      }
-    }
-    for ( var z = 0; z < this.WPsList.length; z++ ) {
-      this.taskservice.insertWPIService( this.WPsList[z] );
-    }
-    for ( var z = 0; z < this.TPsList.length; z++ ) {
-      if ( this.TPsList[z].tp_task.substring( this.TPsList[z].tp_task.length - 2 )  == "CT" ) {
-        this.projectservice.applyDataFlowCTService( this.TPsList[z] );
-      } else {
-        this.projectservice.applyDataFlowService( this.TPsList[z] );
-      }
-    }
+    this.insertingData();
+
     this.success = 1;
   };
-
 
   ngOnInit() {
   }
