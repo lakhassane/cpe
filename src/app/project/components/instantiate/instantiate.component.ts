@@ -15,7 +15,8 @@ export class InstantiateComponent implements OnInit {
   task: any = {};
   CPatterns: any = [];
   Actors:any = [];
-  WPI2:any = []; // Created WPIs in database
+  //WPI2:any = []; // Created WPIs in database
+  WPI2:any = {}; // Created WPIs in database
   numberOfActors:any = 1;
 
   CPSTI:any = []; // Holds all the STIs of the chosen Collaboration Pattern
@@ -108,9 +109,6 @@ export class InstantiateComponent implements OnInit {
       }
     }
 
-    /*for ( var i = 0; i < obj["Process"].task.length; i++ ) {
-
-    }*/
     let TIPt1, TIPt2;
     TIPt1 = this.getTIPbyTaskId( this.PTIP, "t1" );
     TIPt2 = this.getTIPbyTaskId( this.PTIP, "t2" );
@@ -120,7 +118,7 @@ export class InstantiateComponent implements OnInit {
     ]);
   }
 
-  instantiateTask() {
+  async instantiateTask() {
     this.parsePattern();
     // FROM ALGO : sti = cti.getsingletaskinstance()
     for ( var i = 0; i < this.numberOfActors; i++ ) {
@@ -135,8 +133,8 @@ export class InstantiateComponent implements OnInit {
     }
 
     for ( var z = 0; z < this.STI.length; z++ ) {
-      this.taskservice.insertSTIService( this.STI[z] );
-      this.taskservice.insertWPIService( this.WPI[z] );
+      let STIAsyncResult = await this.taskservice.insertSTIService( this.STI[z] );
+      let WPIAsyncResult = await this.taskservice.insertWPIService( this.WPI[z] );
     }
 
     // Applying Control-Flow
@@ -160,7 +158,7 @@ export class InstantiateComponent implements OnInit {
       });
 
       for ( var y = 0; y < this.TIS.length; y++ ) {
-        this.taskservice.applySTISequencingService( this.TIS[y] );
+        let TISAsyncResult = await this.taskservice.applySTISequencingService( this.TIS[y] );
       }
     }
 
@@ -194,7 +192,7 @@ export class InstantiateComponent implements OnInit {
 
     for ( var y = 0; y < this.TIP.length; y++ ) {
       // let wpi = "ASS_" + (y+1);
-      this.taskservice.applyDataFlowService( this.TIP[y] );
+      let TIPAsyncResult = await this.taskservice.applyDataFlowService( this.TIP[y] );
     }
     console.log( this.TIP );
 
@@ -206,8 +204,8 @@ export class InstantiateComponent implements OnInit {
     for ( var i = 0; i < num; i++ ) {
       this.WPI.push({
         id: i,
-        wpi_id: "ASS_" + ( i + 1 ),
-        wpi_name: "ASS_" + ( i + 1 ),
+        wpi_id: this.WPI2.wpi_id + "_" + ( i + 1 ),
+        wpi_name: this.WPI2.wpi_id + "_" + ( i + 1 )
       });
 
       this.TOINSTANTIATE.push({
@@ -228,6 +226,13 @@ export class InstantiateComponent implements OnInit {
 
         console.log( this.task.task_name );
       });
+
+      this.taskservice.getWPIByCTIIdService( params['id'] )
+        .subscribe( res => {
+          this.WPI2.wpi_id = res[0].wpi.properties.wpi_id;
+          console.log(this.WPI2);
+        });
+
     });
 
     this.projectservice.getAllCollaborationPatternService()
@@ -242,7 +247,7 @@ export class InstantiateComponent implements OnInit {
         }
       });
 
-    this.taskservice.getAllWPIsService()
+    /*this.taskservice.getAllWPIsService()
       .subscribe( (res: any[]) => {
         for ( var i = 0; i < res.length; i++ ) {
           this.WPI2.push({
@@ -250,7 +255,9 @@ export class InstantiateComponent implements OnInit {
             wpi_name: res[i]._node.properties['wpi_name']
           })
         }
-      });
+      });*/
+
+
 
     this.projectservice.getAllActorsService()
       .subscribe( (res: any[]) => {

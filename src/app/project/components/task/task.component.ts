@@ -18,9 +18,10 @@ export class TaskComponent implements OnInit {
       .subscribe( res => {
         for ( var i = 0; i < res.length; i++ ) {
           this.TasksList.push({
-            task_id: res[i]._node.properties['task_id'],
-            task_name: res[i]._node.properties['task_name'],
-            instantiated: res[i]._node.properties['state'] == "Instantiated" ? true: false,
+            task_id: res[i]._node.labels[0] == "SingleTaskInstance" ? res[i]._node.properties['sti_id'] :
+                                                res[i]._node.properties['cti_id'],
+            task_name: res[i]._node.labels[0] == "SingleTaskInstance" ? res[i]._node.properties['sti_name'] :
+                                                res[i]._node.properties['cti_name'],
             state: res[i]._node.properties['state']
           })
 

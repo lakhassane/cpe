@@ -16,7 +16,7 @@ export class ProjectService {
       task_name: task.task_name,
       cti_id: cti.cti_id,
       cti_name: cti.cti_name,
-      cti_state: "instantiated"
+      cti_state: "created"
     };
     this
       .http
@@ -33,7 +33,7 @@ export class ProjectService {
       task_name: task.task_name,
       sti_id: sti.sti_id,
       sti_name: sti.sti_name,
-      sti_state: "instantiated"
+      sti_state: "created"
 
     };
     this

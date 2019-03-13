@@ -221,7 +221,7 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>State</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
               </thead>
               <tbody>
@@ -232,8 +232,10 @@
                 <td>
                   <!--<a ng-class="task.instantiated ? 'btn disabled' : ''"
                      ng-click="openModal(task)">instancier</a>-->
-                  <a [routerLink]="['/instantiate', task.task_id]">Instantiate</a>
-                  <a [routerLink]="['/listinstances', task.task_id]">See instances</a>
+                  <a [ngClass]="task.state == 'created' ?'btn btn-success' : 'btn disabled'"
+                     [routerLink]="['/instantiate', task.task_id]">Instantiate</a>
+                  <a [ngClass]="task.state != 'created' ?'btn btn-success' : 'btn disabled'"
+                     [routerLink]="['/listinstances', task.task_id]">See instances</a>
                   <!--<a ng-class="!task.instantiated ? 'btn disabled' : ''"
                      href="./ctidetails.html?id={{task.task_id}}">Voir instances</a>-->
                 </td>

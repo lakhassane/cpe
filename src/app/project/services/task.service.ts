@@ -39,6 +39,16 @@ export class TaskService {
       }));
   }
 
+  getWPIByCTIIdService( id ) {
+    const uri = "http://localhost:8585/api/wpibycti/" + id;
+    return this
+      .http
+      .get( uri )
+      .pipe( map( res => {
+        return res
+      }));
+  }
+
   insertSTIService( sti ) {
     const uri = "http://localhost:8585/api/sti";
     const obj = {
