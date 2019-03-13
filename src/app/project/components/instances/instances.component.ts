@@ -21,24 +21,31 @@ export class InstancesComponent implements OnInit {
     this.instanceservice.updateStateService( sti.sti_id, "finished" );
   }
 
+  async getInstances ( id ) {
+
+    let InstancesByCTIId: any = await this.instanceservice.getAllInstancesByCTIIDService( id ).toPromise();
+    console.log( InstancesByCTIId );
+
+    for ( let i = 0; i < InstancesByCTIId.length; i++ ) {
+      let PreviousSTI: any = await this.instanceservice.getPreviousSTIService( InstancesByCTIId[i].
+                                                _node.properties['sti_id'] ).toPromise();
+
+      this.STI.push({
+        sti_id: PreviousSTI ? PreviousSTI.sti[0]._node.properties['sti_id'] : null,
+        sti_name: PreviousSTI ? PreviousSTI.sti[0]._node.properties['sti_name'] : null,
+        state: PreviousSTI ? PreviousSTI.sti[0]._node.properties['state'] : null,
+        previous: PreviousSTI.previous[0]._node ? PreviousSTI.previous[0]._node.properties : null
+      });
+
+    }
+    console.log(this.STI);
+  }
+
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.instanceservice.getAllInstancesByCTIIDService( params['id'] ).subscribe( (res:any[]) => {
-        console.log( res.length );
-        for ( let i = 0; i < res.length; i++ ) {
-          this.instanceservice.getPreviousSTIService( res[i]._node.properties['sti_id'] )
-              .subscribe( res2 => {
-              this.STI.push({
-                sti_id: res[i]._node.properties['sti_id'],
-                sti_name: res[i]._node.properties['sti_name'],
-                state: res[i]._node.properties['state'],
-                previous: res2[0] ? res2[0].sti2.properties : null
-              })
-            });
-        }
-        console.log(this.STI);
-      });
+      this.getInstances( params['id'] );
     });
+    //this.getInstances();
   }
 
 }
