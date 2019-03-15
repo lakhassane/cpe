@@ -38,6 +38,7 @@ export class InstantiateComponent implements OnInit {
 
   input: any = [];
   output: any = [];
+  actorAssignated: any = []; // Holds the actors chosen for each STI
 
   constructor( private route: ActivatedRoute, private taskservice: TaskService, private projectservice: ProjectService,
                private ngxXml2jsonService: NgxXml2jsonService ) { }
@@ -135,6 +136,7 @@ export class InstantiateComponent implements OnInit {
     for ( var z = 0; z < this.STI.length; z++ ) {
       let STIAsyncResult = await this.taskservice.insertSTIService( this.STI[z] );
       let WPIAsyncResult = await this.taskservice.insertWPIService( this.WPI[z] );
+      let AssignAsynResult = await this.taskservice.assignTaskService(this.STI[z], this.actorAssignated[z] );
     }
 
     // Applying Control-Flow
@@ -194,7 +196,6 @@ export class InstantiateComponent implements OnInit {
       // let wpi = "ASS_" + (y+1);
       let TIPAsyncResult = await this.taskservice.applyDataFlowService( this.TIP[y] );
     }
-    console.log( this.TIP );
 
   }
 

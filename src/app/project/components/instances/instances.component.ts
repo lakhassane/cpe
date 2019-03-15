@@ -34,7 +34,8 @@ export class InstancesComponent implements OnInit {
         sti_id: PreviousSTI ? PreviousSTI.sti[0]._node.properties['sti_id'] : null,
         sti_name: PreviousSTI ? PreviousSTI.sti[0]._node.properties['sti_name'] : null,
         state: PreviousSTI ? PreviousSTI.sti[0]._node.properties['state'] : null,
-        previous: PreviousSTI.previous[0]._node ? PreviousSTI.previous[0]._node.properties : null
+        previous: PreviousSTI.previous[0]._node ? PreviousSTI.previous[0]._node.properties : null,
+        actor: PreviousSTI ? PreviousSTI.actor[0]._node.properties['name'] : null,
       });
 
     }
@@ -45,7 +46,6 @@ export class InstancesComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.getInstances( params['id'] );
     });
-    //this.getInstances();
   }
 
 }

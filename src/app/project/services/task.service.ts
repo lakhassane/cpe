@@ -108,4 +108,18 @@ export class TaskService {
       .toPromise().then( res =>
         console.log( res ));
   }
+
+  assignTaskService( sti, actor ) {
+    const uri = "http://localhost:8585/api/assignactor";
+    const obj = {
+      sti_id: sti.sti_id,
+      cti_id: sti.cti_id,
+      actor_name: actor
+    };
+    return this
+      .http
+      .post( uri, obj, {responseType: 'text'} )
+      .toPromise().then( res =>
+          console.log( res ) );
+  }
 }

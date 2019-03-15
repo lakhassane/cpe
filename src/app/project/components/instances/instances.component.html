@@ -235,9 +235,9 @@
               <button [ngClass]="sti.state != 'inprogress' ?'btn disabled' : 'btn btn-success'">In Progress</button>
               <button [ngClass]="sti.state != 'finished' ?'btn disabled' : 'btn btn-success'">Finished</button>
               <br/><br/><br/>
-              <strong>Assigned actor: </strong>
+              <strong>Assigned actor: </strong> <span [innerText]="sti.actor"></span>
               <br/><br/><br/>
-              <strong>Previous task: </strong> <strong [innerText]="sti.previous.sti_name"></strong>
+              <strong>Previous task: </strong> <span [innerText]="sti.previous.sti_name"></span>
             </div>
           </div>
           <!-- END MODALS -->
