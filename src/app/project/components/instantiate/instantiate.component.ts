@@ -136,7 +136,7 @@ export class InstantiateComponent implements OnInit {
     for ( var z = 0; z < this.STI.length; z++ ) {
       let STIAsyncResult = await this.taskservice.insertSTIService( this.STI[z] );
       let WPIAsyncResult = await this.taskservice.insertWPIService( this.WPI[z] );
-      let AssignAsynResult = await this.taskservice.assignTaskService(this.STI[z], this.actorAssignated[z] );
+      let AssignAsynResult = await this.taskservice.assignTaskService( this.STI[z], this.actorAssignated[z] );
     }
 
     // Applying Control-Flow

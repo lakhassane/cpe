@@ -10,6 +10,7 @@ import { InstanceService } from '../../services/instance.service';
 export class InstancesComponent implements OnInit {
 
   STI: any = [];
+  previousTaskCondition: any;
 
   constructor( private route: ActivatedRoute, private instanceservice: InstanceService ) { }
 
@@ -34,12 +35,18 @@ export class InstancesComponent implements OnInit {
         sti_id: PreviousSTI ? PreviousSTI.sti[0]._node.properties['sti_id'] : null,
         sti_name: PreviousSTI ? PreviousSTI.sti[0]._node.properties['sti_name'] : null,
         state: PreviousSTI ? PreviousSTI.sti[0]._node.properties['state'] : null,
-        previous: PreviousSTI.previous[0]._node ? PreviousSTI.previous[0]._node.properties : null,
+        previous: PreviousSTI.previous[0]._node ? PreviousSTI.previous[0]._node.properties : "",
         actor: PreviousSTI ? PreviousSTI.actor[0]._node.properties['name'] : null,
+        ws: PreviousSTI.ws ? PreviousSTI.ws.properties['wsType'] : null
       });
-
     }
-    console.log(this.STI);
+
+    if ( this.STI[0].ws == "FinishToStart" ) {
+      this.previousTaskCondition = "finished";
+    } else if ( this.STI[0].ws == "StartToStart" ) {
+      this.previousTaskCondition = "inprogress";
+    }
+
   }
 
   ngOnInit() {
