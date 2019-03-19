@@ -9,6 +9,7 @@ import { IndexComponent } from './home/components/index/index.component';
 import { TaskComponent } from './project/components/task/task.component';
 import { InstantiateComponent } from './project/components/instantiate/instantiate.component';
 import { InstancesComponent } from './project/components/instances/instances.component';
+import { ChangepatternComponent } from './project/components/changepattern/changepattern.component';
 
 // import services
 import { ProjectService } from './project/services/project.service';

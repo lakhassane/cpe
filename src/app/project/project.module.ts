@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { TaskComponent } from './components/task/task.component';
 import { InstantiateComponent } from './components/instantiate/instantiate.component';
 import { InstancesComponent } from './components/instances/instances.component';
+import { ChangepatternComponent } from './components/changepattern/changepattern.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,6 @@ import { InstancesComponent } from './components/instances/instances.component';
     CommonModule,
     RouterModule
   ],
-  declarations: [ProjectComponent, TaskComponent, InstantiateComponent, InstancesComponent]
+  declarations: [ProjectComponent, TaskComponent, InstantiateComponent, InstancesComponent, ChangepatternComponent]
 })
 export class ProjectModule { }

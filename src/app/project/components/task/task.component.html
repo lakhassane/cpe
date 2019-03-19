@@ -230,14 +230,12 @@
                 <td>{{ task.task_name }}</td>
                 <td>{{ task.state }}</td>
                 <td>
-                  <!--<a ng-class="task.instantiated ? 'btn disabled' : ''"
-                     ng-click="openModal(task)">instancier</a>-->
                   <a [ngClass]="task.state == 'created' ?'btn btn-success' : 'btn disabled'"
-                     [routerLink]="['/instantiate', task.task_id]">Instantiate</a>
+                     [routerLink]="['/instantiate', task.task_id]">Instantiate</a> &nbsp;
                   <a [ngClass]="task.state != 'created' ?'btn btn-success' : 'btn disabled'"
-                     [routerLink]="['/listinstances', task.task_id]">See instances</a>
-                  <!--<a ng-class="!task.instantiated ? 'btn disabled' : ''"
-                     href="./ctidetails.html?id={{task.task_id}}">Voir instances</a>-->
+                     [routerLink]="['/listinstances', task.task_id]">See instances</a> &nbsp;
+                  <a [ngClass]="task.state != 'created' ?'btn btn-info' : 'btn disabled'"
+                     [routerLink]="['/changePattern', task.task_id]">Change pattern</a>
                 </td>
               </tr>
               </tbody>
@@ -245,44 +243,6 @@
           </div>
         </div>
         <!-- END CONTEXTUAL CLASSES TABLE SAMPLE -->
-
-        <script type="text/ng-template" id="myModalContent.html">
-          <div class="modal-header">
-            <h3>Instantiate : {{ task.name }} </h3>
-          </div>
-          <div class="modal-body">
-
-            <div class="form-group col-md-6">
-              <label class="col-md-3 control-label">Number of instances</label>
-              <div class="col-md-9">
-                <select ng-model="instance.numberofinstance" class="form-control select">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group col-md-6" ng-if="instance.numberofinstance > 1">
-              <label class="col-md-3 control-label">Strategy</label>
-              <div class="col-md-9">
-                <select ng-model="instance.strategy" class="form-control select">
-                  <option>Sequential</option>
-                  <option>Parallel</option>
-                </select>
-              </div>
-            </div>
-            <br/>
-            <br/>
-            <br/>
-
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-primary" ng-click="instantiateTask(instance)">Instantiate</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-          </div>
-        </script>
 
       </div>
 
