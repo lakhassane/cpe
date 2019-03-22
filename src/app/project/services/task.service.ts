@@ -14,7 +14,7 @@ export class TaskService {
     return this
         .http
         .get( uri )
-        .pipe(map( res => {
+        .pipe( map( res => {
           return res;
         }));
   }
@@ -25,8 +25,42 @@ export class TaskService {
         .http
         .get( uri )
         .pipe( map( res => {
-          return res
+          return res;
       }));
+  }
+
+  getAllInformationsOfCTIService( id ) {
+    const uri = "http://localhost:8585/api/cti_all/" + id;
+    return this
+        .http
+        .get( uri )
+        .pipe( map( res => {
+          return res;
+      }));
+  }
+
+  deleteRelationshipsOfSTIsService( id ) {
+    const uri = "http://localhost:8585/api/deletetis";
+    const obj = {
+      cti_id: id
+    };
+    return this
+      .http
+      .post( uri, obj, {responseType: 'text'} )
+      .toPromise().then( res =>
+        console.log( res ));
+  }
+
+  deleteTIPSService( id ) {
+    const uri = "http://localhost:8585/api/deletetip";
+    const obj = {
+      cti_id: id
+    };
+    return this
+      .http
+      .post( uri, obj, {responseType: 'text'} )
+      .toPromise().then( res =>
+        console.log( res ));
   }
 
   getAllWPIsService() {
