@@ -39,6 +39,16 @@ export class TaskService {
       }));
   }
 
+  getAllInformationsOfSTIService( id ) {
+    const uri = "http://localhost:8585/api/sti_all/" + id;
+    return this
+      .http
+      .get( uri )
+      .pipe( map( res => {
+        return res;
+      }));
+  }
+
   deleteRelationshipsOfSTIsService( id ) {
     const uri = "http://localhost:8585/api/deletetis";
     const obj = {
