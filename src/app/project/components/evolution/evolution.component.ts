@@ -123,32 +123,27 @@ export class EvolutionComponent implements OnInit {
   let changeLabelResult = await this.taskservice.changeLabelService( this.STIContent.sti.sti_id );
 
   // FROM ALGO : sti = cti.getsingletaskinstance()
-  /*for ( var i = 0; i < this.numberOfActors; i++ ) {
+  for ( var i = 0; i < this.numberOfActors; i++ ) {
     this.STI.push({
       id: i,
       cti_id: this.task.task_id,
-      //sti_id: this.task.task_id + "_" + (i+1),
-      //sti_name: this.task.task_name + "_inst_" + (i+1),
       sti_id: this.task.task_id + "_" + this.STIORDERED[i].substring( this.STIORDERED[i].length - 1 ),
       sti_name: this.STIORDERED[i]
     });
-  }*/
+  }
 
-  /*for ( var z = 0; z < this.STI.length; z++ ) {
+  for ( var z = 0; z < this.STI.length; z++ ) {
     let STIAsyncResult = await this.taskservice.insertSTIService( this.STI[z] );
     let WPIAsyncResult = await this.taskservice.insertWPIService( this.WPI[z] );
     let AssignAsynResult = await this.taskservice.assignTaskService( this.STI[z], this.actorAssignated[z] );
-  }*/
+  }
 
   // Applying Control-Flow
-  /*if ( this.CPSTI[0].successor_id != null ) {
+  if ( this.CPSTI[0].successor_id != null ) {
     this.wsType = this.CPSTI[0].tasksequence["@attributes"].linkKind;
-    //for ( var i = 1; i < this.numberOfActors; i++ ) {
     for ( var i = 0; i < this.STI.length - 1; i++ ) {
       this.TIS.push({
         id: i,
-        //successor_id: this.task.task_id + "_" + (i+1),
-        //predecessor_id: this.task.task_id + "_" + i,
         linkKind: this.wsType,
         successor_id: this.STI[i+1].sti_id,
         predecessor_id: this.STI[i].sti_id
@@ -163,10 +158,10 @@ export class EvolutionComponent implements OnInit {
     for ( var y = 0; y < this.TIS.length; y++ ) {
       let TISAsyncResult = await this.taskservice.applySTISequencingService( this.TIS[y] );
     }
-  }*/
+  }
 
   // Applying Data Flow
-  /*let index = 0; // index des insertions
+  let index = 0; // index des insertions
   let inputIndex = 1; // index of input
   let outputIndex = 0; // index of output
   for ( var j = 0; j < this.numberOfActors - 1; j++ ) {
@@ -180,9 +175,6 @@ export class EvolutionComponent implements OnInit {
           id: (j+1),
           direction: this.CPTIP[0][m][l][0].direction,
           task: this.STI[j+m],
-          //wpi: this.WPI[j+l].wpi_name
-          //input: this.input[index],
-          //output: this.output[index],
           wpi: this.CPTIP[0][m][l][0].direction == "in" ? this.input[inputIndex] : this.output[outputIndex]
         });
         index++;
@@ -191,12 +183,11 @@ export class EvolutionComponent implements OnInit {
         } else { outputIndex++ }
       }
     }
-  }*/
+  }
 
-  /*for ( var y = 0; y < this.TIP.length; y++ ) {
-    // let wpi = "ASS_" + (y+1);
+  for ( var y = 0; y < this.TIP.length; y++ ) {
     let TIPAsyncResult = await this.taskservice.applyDataFlowService( this.TIP[y] );
-  }*/
+  }
 
 }
 
@@ -213,11 +204,9 @@ export class EvolutionComponent implements OnInit {
       this.TOINSTANTIATE.push({
         id: i,
         task_id: this.task.task_id + "_" + ( i + 1),
-        task_name: this.task.task_name + "_inst_" + ( i + 1)
+        task_name: this.STIContent.sti.sti_name + "__" + ( i + 1)
       })
     }
-    console.log( this.WPI );
-    console.log( this.TOINSTANTIATE );
     return new Array( Number( num ) );
   };
 
@@ -237,10 +226,8 @@ export class EvolutionComponent implements OnInit {
         this.STIContent.previous = res.previous[0]._node ? res.previous[0]._node.properties : null;
         this.STIContent.sti = res.sti[0]._node.properties;
 
-        console.log( this.STIContent );
       });
     });
-
 
     this.projectservice.getAllActorsService()
       .subscribe( (res: any[]) => {

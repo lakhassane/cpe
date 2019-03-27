@@ -74,10 +74,13 @@ export class TaskService {
   }
 
   changeLabelService( id ) {
-    const uri = "http://localhost:8585/api/changelabel/" + id;
+    const uri = "http://localhost:8585/api/changelabel";
+    const obj = {
+      sti_id: id
+    };
     return this
       .http
-      .get( uri )
+      .post( uri, obj, {responseType: 'text'} )
       .toPromise().then( res =>
         console.log( res ));
   }
