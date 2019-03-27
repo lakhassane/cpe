@@ -73,6 +73,15 @@ export class TaskService {
         console.log( res ));
   }
 
+  changeLabelService( id ) {
+    const uri = "http://localhost:8585/api/changelabel/" + id;
+    return this
+      .http
+      .get( uri )
+      .toPromise().then( res =>
+        console.log( res ));
+  }
+
   getAllWPIsService() {
     const uri = "http://localhost:8585/api/wpi/";
     return this

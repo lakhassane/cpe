@@ -209,7 +209,7 @@
     <!-- PAGE TITLE -->
     <div class="page-title col-md-12">
       <div class="col-md-6">
-        <h2><span class="fa fa-arrow-circle-o-left"></span> Task : <strong>{{ this.STIContent.sti.sti_name }}</strong></h2>
+        <h2><span class="fa fa-arrow-circle-o-left"></span> Task : <strong>{{ task.task_id }}</strong></h2>
       </div>
       <button type="button" (click)="instantiateTask()"
               class="mb-control col-md-offset-5 col-md-1 btn btn-primary btn-lg">Submit</button>
@@ -245,6 +245,7 @@
                 </a>
               </li>
             </ul>
+
             <div id="step-0">
 
               <div class="form-group">
