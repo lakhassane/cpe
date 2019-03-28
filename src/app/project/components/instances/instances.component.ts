@@ -10,6 +10,7 @@ import { InstanceService } from '../../services/instance.service';
 export class InstancesComponent implements OnInit {
 
   STI: any = [];
+  CTI: any = [];
   previousTaskCondition: any;
 
   constructor( private route: ActivatedRoute, private instanceservice: InstanceService ) { }
@@ -25,7 +26,8 @@ export class InstancesComponent implements OnInit {
   async getInstances ( id ) {
 
     let InstancesByCTIId: any = await this.instanceservice.getAllInstancesByCTIIDService( id ).toPromise();
-    console.log( InstancesByCTIId );
+    let InstancesCTIByCTIId: any = await this.instanceservice.getAllInstancesCTIByCTIIDService( id ).toPromise();
+    //console.log( InstancesByCTIId );
 
     for ( let i = 0; i < InstancesByCTIId.length; i++ ) {
       let PreviousSTI: any = await this.instanceservice.getPreviousSTIService( InstancesByCTIId[i].
@@ -35,9 +37,26 @@ export class InstancesComponent implements OnInit {
         sti_id: PreviousSTI ? PreviousSTI.sti[0]._node.properties['sti_id'] : null,
         sti_name: PreviousSTI ? PreviousSTI.sti[0]._node.properties['sti_name'] : null,
         state: PreviousSTI ? PreviousSTI.sti[0]._node.properties['state'] : null,
-        previous: PreviousSTI.previous[0]._node ? PreviousSTI.previous[0]._node.properties : "",
+        previous: PreviousSTI.previousSTI[0]._node ? PreviousSTI.previousSTI[0]._node.properties['sti_name'] :
+                      PreviousSTI.previousCTI[0]._node ? PreviousSTI.previousCTI[0]._node.properties['cti_name'] : "",
         actor: PreviousSTI ? PreviousSTI.actor[0]._node.properties['name'] : null,
-        ws: PreviousSTI.ws ? PreviousSTI.ws.properties['wsType'] : null
+        ws: PreviousSTI.wsSTI ? PreviousSTI.wsSTI.properties['wsType'] :
+                      PreviousSTI.wsCTI ? PreviousSTI.wsCTI.properties['wsType'] : null
+      });
+    }
+    for ( let i = 0; i < InstancesCTIByCTIId.length; i++ ) {
+      let PreviousCTI: any = await this.instanceservice.getPreviousSTIForCTIService( InstancesCTIByCTIId[i].
+        _node.properties['cti_id'] ).toPromise();
+
+      this.CTI.push({
+        cti_id: PreviousCTI ? PreviousCTI.cti[0]._node.properties['cti_id'] : null,
+        cti_name: PreviousCTI ? PreviousCTI.cti[0]._node.properties['cti_name'] : null,
+        state: PreviousCTI ? PreviousCTI.cti[0]._node.properties['state'] : null,
+        previous: PreviousCTI.previousSTI[0]._node ? PreviousCTI.previousSTI[0]._node.properties['sti_name'] :
+          PreviousCTI.previousCTI[0]._node ? PreviousCTI.previousCTI[0]._node.properties['cti_name'] : "",
+        //actor: PreviousCTI ? PreviousCTI.actor[0]._node.properties['name'] : null,
+        ws: PreviousCTI.wsSTI ? PreviousCTI.wsSTI.properties['wsType'] :
+          PreviousCTI.wsCTI ? PreviousCTI.wsCTI.properties['wsType'] : null
       });
     }
 
@@ -52,6 +71,8 @@ export class InstancesComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.getInstances( params['id'] );
+      this.STI = [];
+      this.CTI = [];
     });
   }
 

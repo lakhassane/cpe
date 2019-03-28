@@ -246,6 +246,36 @@
           <!-- END MODALS -->
 
         </div>
+
+        <div class="col-md-6">
+
+          <!-- START MODALS -->
+          <div class="panel panel-default" *ngFor="let cti of CTI">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{ cti.cti_name }}</h3>
+
+              <button [ngClass]="cti.previous != null && cti.previous.state != previousTaskCondition ?
+                                        'btn disabled' : 'btn btn-success'" style="float:right"
+                      (click)="startTask(cti)">Start task</button>
+              <button [ngClass]="cti.state != 'inprogress' ?'btn disabled' : 'btn btn-danger'"
+                      style="float:right" (click)="endTask(cti)">End task</button>
+              <button [ngClass]="1 != 1 ?'btn disabled' : 'btn btn-info'"
+                      style="float:right" [routerLink]="['/listinstances', cti.cti_id]">Instances</button>
+            </div>
+            <div class="panel-body">
+              <strong>State: </strong>
+              <button [ngClass]="cti.state != 'instantiated' ?'btn disabled' : 'btn btn-success'">Instantiated</button>
+              <button [ngClass]="cti.state != 'assigned' ?'btn disabled' : 'btn btn-success'">Assigned</button>
+              <button [ngClass]="cti.state != 'inprogress' ?'btn disabled' : 'btn btn-success'">In Progress</button>
+              <button [ngClass]="cti.state != 'finished' ?'btn disabled' : 'btn btn-success'">Finished</button>
+              <br/><br/><br/>
+
+              <strong>Previous task: </strong> <span [innerText]="cti.previous"></span>
+            </div>
+          </div>
+          <!-- END MODALS -->
+
+        </div>
         <!-- END CONTEXTUAL CLASSES TABLE SAMPLE -->
 
       </div>

@@ -18,6 +18,15 @@ export class InstanceService {
           return res;
         }));
   }
+  getAllInstancesCTIByCTIIDService( id ) {
+    const uri = "http://localhost:8585/api/instancectibycti/" + id;
+    return this
+      .http
+      .get( uri )
+      .pipe(map( res => {
+        return res;
+      }));
+  }
 
   getPreviousSTIService( id ) {
     const uri = "http://localhost:8585/api/previoussti/" + id;
@@ -27,6 +36,16 @@ export class InstanceService {
         .pipe( map( res => {
           return res;
         }));
+  }
+
+  getPreviousSTIForCTIService( id ) {
+    const uri = "http://localhost:8585/api/previousstiforcti/" + id;
+    return this
+      .http
+      .get( uri )
+      .pipe( map( res => {
+        return res;
+      }));
   }
 
   updateStateService(sti_id, state) {
