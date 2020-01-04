@@ -223,7 +223,7 @@
             <div class="panel-heading">
               <h3 class="panel-title">{{ sti.sti_name }}</h3>
 
-              <button [ngClass]="sti.previous != null && sti.previous.state != previousTaskCondition ?
+              <button [ngClass]="sti.previous != null && sti.previous.properties.state != previousTaskCondition ?
                                         'btn disabled' : 'btn btn-success'" style="float:right"
                       (click)="startTask(sti)">Start task</button>
               <button [ngClass]="sti.state != 'inprogress' ?'btn disabled' : 'btn btn-danger'"
@@ -240,7 +240,7 @@
               <br/><br/><br/>
               <strong>Assigned actor: </strong> <span [innerText]="sti.actor"></span>
               <br/><br/><br/>
-              <strong>Previous task: </strong> <span [innerText]="sti.previous.sti_name"></span>
+              <strong>Previous task: </strong> <span [innerText]="sti.previous.properties.sti_name"></span>
             </div>
           </div>
           <!-- END MODALS -->

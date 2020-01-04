@@ -194,6 +194,7 @@ export class EvolutionComponent implements OnInit {
   getNumber = function( num ) {
     this.WPI = [];
     this.TOINSTANTIATE = [];
+    console.log( this.STIContent );
     for ( var i = 0; i < num; i++ ) {
       this.WPI.push({
         id: i,
@@ -204,7 +205,7 @@ export class EvolutionComponent implements OnInit {
       this.TOINSTANTIATE.push({
         id: i,
         task_id: this.task.task_id + "_" + ( i + 1),
-        task_name: this.STIContent.sti.sti_name + "__" + ( i + 1)
+        task_name: this.STIContent.sti ? this.STIContent.sti.sti_name + "__" + ( i + 1) : null
       })
     }
     return new Array( Number( num ) );
@@ -214,19 +215,22 @@ export class EvolutionComponent implements OnInit {
   ngOnInit() {
 
     this.route.params.subscribe(params => {
+      console.log( 'task : ' + params['id']);
       this.task.task_id = params['id'];
       this.taskservice.getAllInformationsOfSTIService( params['id'] ).subscribe( (res: any) => {
 
         this.STIContent.cti = res.cti[0]._node.properties;
 
-        this.STIContent.input = res.input[0]._node.properties['wpi_id'];
-        this.STIContent.output = res.output[0]._node.properties['wpi_id'];
+        this.STIContent.input = res.input[0]._node ? res.input[0]._node.properties['wpi_id'] : null;
+        this.STIContent.output = res.output[0]._node ? res.output[0]._node.properties['wpi_id'] : null;
 
         this.STIContent.next = res.next[0]._node ? res.next[0]._node.properties : null;
         this.STIContent.previous = res.previous[0]._node ? res.previous[0]._node.properties : null;
         this.STIContent.sti = res.sti[0]._node.properties;
 
       });
+
+      console.log(this.STIContent);
     });
 
     this.projectservice.getAllActorsService()

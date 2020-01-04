@@ -37,8 +37,10 @@ export class InstancesComponent implements OnInit {
         sti_id: PreviousSTI ? PreviousSTI.sti[0]._node.properties['sti_id'] : null,
         sti_name: PreviousSTI ? PreviousSTI.sti[0]._node.properties['sti_name'] : null,
         state: PreviousSTI ? PreviousSTI.sti[0]._node.properties['state'] : null,
-        previous: PreviousSTI.previousSTI[0]._node ? PreviousSTI.previousSTI[0]._node.properties['sti_name'] :
-                      PreviousSTI.previousCTI[0]._node ? PreviousSTI.previousCTI[0]._node.properties['cti_name'] : "",
+        //previous: PreviousSTI.previousSTI[0]._node ? PreviousSTI.previousSTI[0]._node.properties['sti_name'] :
+        //              PreviousSTI.previousCTI[0]._node ? PreviousSTI.previousCTI[0]._node.properties['cti_name'] : "",
+        previous: PreviousSTI.previousSTI[0]._node ? PreviousSTI.previousSTI[0]._node :
+          PreviousSTI.previousCTI[0]._node ? PreviousSTI.previousCTI[0]._node : null,
         actor: PreviousSTI ? PreviousSTI.actor[0]._node.properties['name'] : null,
         ws: PreviousSTI.wsSTI ? PreviousSTI.wsSTI.properties['wsType'] :
                       PreviousSTI.wsCTI ? PreviousSTI.wsCTI.properties['wsType'] : null
@@ -59,13 +61,14 @@ export class InstancesComponent implements OnInit {
           PreviousCTI.wsCTI ? PreviousCTI.wsCTI.properties['wsType'] : null
       });
     }
-
+  console.log( this.STI);
+  console.log( this.CTI);
     if ( this.STI[0].ws == "FinishToStart" ) {
       this.previousTaskCondition = "finished";
     } else if ( this.STI[0].ws == "StartToStart" ) {
       this.previousTaskCondition = "inprogress";
     }
-
+  console.log(this.previousTaskCondition);
   }
 
   ngOnInit() {
