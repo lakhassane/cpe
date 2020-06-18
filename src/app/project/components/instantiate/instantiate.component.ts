@@ -201,6 +201,7 @@ export class InstantiateComponent implements OnInit {
 
   getNumber = function( num ) {
     this.WPI = [];
+    this.Input = [];
     this.TOINSTANTIATE = [];
     for ( var i = 0; i < num; i++ ) {
       this.WPI.push({
